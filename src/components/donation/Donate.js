@@ -49,7 +49,7 @@ const ButtonWrapper = ({ currency }) => {
       email: email,
       name: name,
     });
-    navigate("/thankyou");
+    navigate("/donor/thankyou");
   };
 
   const handleApprove = (data, actions) => {

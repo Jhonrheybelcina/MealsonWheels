@@ -1,12 +1,40 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import "../../assets/css/home.css";
 import home1 from "../../assets/images/home2 (1).png";
 import home2 from "../../assets/images/home3 (1).png";
 import home3 from "../../assets/images/home1.png";
 import { notification } from "antd";
+import axios from "axios";
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      order: [],
+    };
+  }
+
+  componentDidMount() {
+    const token = localStorage.getItem("accessToken");
+    const memberId = localStorage.getItem("userId");
+    const headers = {
+      Authorization: "Bearer " + token,
+    };
+       
+    axios
+    .get(`http://localhost:8080/showMemberOrder/${memberId}`, { headers })
+    .then((response) => {
+        console.log("member_id = " + memberId);
+        this.setState({
+            order: response.data,
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
+    }
+
   handleDonateClick = () => {
     const isLoggedIn = localStorage.getItem("isLoggedIn"); // Check if the user is logged in
     console.log(isLoggedIn);
@@ -54,8 +82,27 @@ class Home extends Component {
   };
 
   render() {
-
-    
+    const pendingorderdata = this.state.order;
+    // const pendingOrders = pendingorderdata.filter((o) => o.order_status === "Pending");
+    console.log("orderdata:",pendingorderdata);
+    const orderHeader = (
+      <thead>
+        <tr>
+          <th scope="col">Member</th>
+          <th scope="col">Meal Name</th>
+          <th scope="col">Location</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+    );
+    const orderCell = pendingorderdata.map((o, order_index) => (
+      <tr key={order_index}>
+        <td>{o.member_name}</td>
+        <td>{o.meal_name}</td>
+        <td>{o.location}</td>
+        <td className="text-warning satoshi-bold">{o.order_status}</td>
+      </tr>
+    ));
     return (
       <div style={{ backgroundColor: "#f2f2f2" }}>
         <div className="homebanner">
@@ -71,7 +118,25 @@ class Home extends Component {
             </div>
           </div>
         </div>
-
+        {/* Off Canvas --- Order status */}
+        <div class="position-fixed top-50 rounded-end">
+          <button className="btn btn-warning py-4 px-3 rounded-end text-white satoshi fw-bold" type="button" 
+            data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
+            ORDER STATUS ››
+          </button>
+        </div>
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Order Status</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <table className="table table-responsive-md table-striped table-hover">
+            {orderHeader}
+            <tbody>{orderCell}</tbody>
+          </table>
+        </div>
+      </div>
         <div className="container">
           <div className="bannerbelow">
             <div className="bannerbelow1 bannerbelowchild shadow">
@@ -93,12 +158,13 @@ class Home extends Component {
           <div className="row">
             <div className="col-4">
               <div
-                className="choice1 shadow-lg"
+                className="choice1 shadow-lg onhover"
                 onClick={this.handleDonateClick}
-              >
-                <Link to="/donor/funds">
+              ><div className="onhover">
+                {/* <Link to="/register"> */}
                   <h3 className="choiceName choiceName1">Donate Now</h3>
-                </Link>
+                {/* </Link> */}
+                </div>
               </div>
             </div>
 
@@ -106,21 +172,23 @@ class Home extends Component {
               <div
                 className="choice2 shadow-lg"
                 onClick={this.handleOrderClick}
-              >
-                <Link to="/member/menu">
+              ><div className="onhover">
+                {/* <Link to="/register"> */}
                   <h3 className="choiceName choiceName2">Order Now</h3>
-                </Link>
+                {/* </Link> */}
+                </div>
               </div>
             </div>
 
             <div className="col-4">
               <div
-                className="choice3 shadow-lg"
+                className="choice3 shadow-lg onhover"
                 onClick={this.handleVolunteerClick}
-              >
-                <Link to="/register">
+              ><div className="onhover">
+                {/* <Link to="/register"> */}
                   <h3 className="choiceName choiceName3">Be a Volunteer</h3>
-                </Link>
+                {/* </Link> */}
+                </div>
               </div>
             </div>
           </div>

@@ -201,7 +201,8 @@ class Admin extends Component {
         </div>
         <div>
           <span className="satoshi-bold">
-            {p.firstName} {p.lastName}
+            {p.firstName} 
+            {/* {p.lastName} */}
           </span>
           <br></br>
           <span className="small">{p.address}</span>
@@ -261,7 +262,8 @@ class Admin extends Component {
                       })
                     }
                   >
-                    {p.firstName} {p.lastName}
+                    {p.firstName} 
+                    {/* {p.lastName} */}
                   </button>
                 </li>
               ))}
@@ -413,6 +415,12 @@ class Admin extends Component {
               <Link className="nav-link" to="/admin/add-meal">
                 <i className="fas fa-plus"></i>
                 <span> Add a Meal</span>
+              </Link>
+            </li>
+            <li class="nav-item">
+            <Link className="nav-link" to="/admin/donors">
+                <i class="fas fa-fw fa-user"></i>
+                <span>Donors</span>
               </Link>
             </li>
             <li className="nav-item">

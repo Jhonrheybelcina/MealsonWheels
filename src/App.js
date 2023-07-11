@@ -155,7 +155,7 @@ class App extends Component {
             }
           />
           <Route
-            path="/donor/funds"
+            path="/donor/dashboard"
             element={
               <div>
                 <Header />
